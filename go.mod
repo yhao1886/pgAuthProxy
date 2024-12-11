@@ -1,6 +1,6 @@
 module pgAuthProxy
 
-go 1.23.3
+go 1.21
 
 require (
 	github.com/go-cmd/cmd v1.4.3

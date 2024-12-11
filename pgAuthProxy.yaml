@@ -9,6 +9,6 @@ authenticator:
       cat << END
       database=postgres
       user=postgres
-      _META_TARGET_HOST=127.0.0.1:5439
-      _META_TARGET_CRED=md53175bce1d3201d16594cebf9d7eb3f9d
+      _META_TARGET_HOST=30.0.4.60:32930
+      _META_TARGET_CRED=md5126d398966b3889a0ef02f628dd76cac
       END
