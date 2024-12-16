@@ -8,7 +8,7 @@ import (
 func main1() {
 	// 假设的用户名和密码
 	username := "postgres"
-	password := "postgres"
+	password := "uUhTXrsR"
 
 	// 第一步：连接用户名和密码
 	firstConcat := fmt.Sprintf("%s%s", password, username)

@@ -103,6 +103,7 @@ func (f *ProxyFront) handleStartup() (map[string]string, error) {
 				f.logger.Get().WithError(err).Error("Failed to send cleartext password authentication request")
 			}
 		}
+
 		return f.originProps, nil
 	case *pgproto3.SSLRequest:
 		_, err = f.conn.Write([]byte("N"))
@@ -126,6 +127,7 @@ func (f ProxyFront) Close() {
 func (f *ProxyFront) Run() {
 	f.logger.Get().Debug("Client connected")
 	defer f.logger.Get().Debug("Connection closed")
+	// startup
 	_, err := f.handleStartup()
 	if err != nil {
 		f.logger.Get().WithError(err).Warn("Client connection init error")
@@ -139,6 +141,7 @@ func (f *ProxyFront) Run() {
 		}
 		switch msg.(type) {
 		case *pgproto3.PasswordMessage:
+			// 校验密码
 			err := f.handlePasswordAuth(msg.(*pgproto3.PasswordMessage))
 			if err != nil {
 				f.logger.Get().WithError(err).Error("Failed to authenticate")

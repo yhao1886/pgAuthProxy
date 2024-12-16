@@ -2,7 +2,10 @@ package auth
 
 import (
 	"bytes"
+	"crypto/hmac"
 	"crypto/md5"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	gocmd "github.com/go-cmd/cmd"
@@ -12,6 +15,27 @@ import (
 	"pgAuthProxy/utils"
 	"strings"
 )
+
+func ComputeClientProof(saltedPassword, authMessage []byte) []byte {
+	clientKey := computeHMAC(saltedPassword, []byte("Client Key"))
+	storedKey := sha256.Sum256(clientKey)
+	clientSignature := computeHMAC(storedKey[:], authMessage)
+
+	clientProof := make([]byte, len(clientSignature))
+	for i := 0; i < len(clientSignature); i++ {
+		clientProof[i] = clientKey[i] ^ clientSignature[i]
+	}
+
+	buf := make([]byte, base64.StdEncoding.EncodedLen(len(clientProof)))
+	base64.StdEncoding.Encode(buf, clientProof)
+	return buf
+}
+
+func computeHMAC(key, msg []byte) []byte {
+	mac := hmac.New(sha256.New, key)
+	mac.Write(msg)
+	return mac.Sum(nil)
+}
 
 func CreateMd5Credential(user string, password string) string {
 	credHash := md5.Sum([]byte(password + user))
@@ -70,6 +94,9 @@ func Exec(props map[string]string, password string, salt [4]byte) (map[string]st
 				}
 			}
 		}
+		ret["user"] = parameters["user"]
+		ret["database"] = parameters["database"]
+		ret[utils.TargetPasswordParameter] = parameters[utils.SourceCredentialParameter]
 		return ret, nil
 	}
 }

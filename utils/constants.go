@@ -15,4 +15,5 @@ const (
 	SourceSaltParameter       = SourceMetaPrefix + "SALT"
 	TargetCredentialParameter = MetaPrefix + "TARGET_CRED"
 	TargetHostParameter       = MetaPrefix + "TARGET_HOST"
+	TargetPasswordParameter   = MetaPrefix + "TARGET_PASSWORD"
 )
