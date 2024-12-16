@@ -1,0 +1,1 @@
+run_command: go run cmd/root.go

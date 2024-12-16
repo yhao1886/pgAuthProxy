@@ -1,0 +1,9 @@
+.1024*
+!.1024
+.breakpoints
+*.exe
+*.dll
+*.so
+*.dylib
+/bin/
+.vendor/
